@@ -1,14 +1,14 @@
 {
-    "name": "denpa/php-bitcoinrpc",
+    "name": "onurrr/php-viacoinrpc",
     "type": "library",
-    "description": "Bitcoin JSON-RPC client based on GuzzleHttp",
-    "keywords": ["bitcoin","api","jsonrpc","guzzle"],
-    "homepage": "https://github.com/denpamusic/php-bitcoinrpc",
+    "description": "Viacoin JSON-RPC client based on GuzzleHttp",
+    "keywords": ["viacoin","api","jsonrpc","guzzle"],
+    "homepage": "https://github.com/onurrr/php-viacoinrpc",
     "license": "MIT",
     "authors": [
         {
-            "name": "Denis Paavilainen",
-            "email": "denpa@netfleet.space",
+            "name": "Onurrr",
+            "email": "mewnbot@gmail.com",
             "role": "Developer"
         }
     ],
@@ -21,7 +21,7 @@
     },
     "autoload": {
         "psr-4" : {
-            "Denpa\\Bitcoin\\": "src"
+            "Onurrr\\Viacoin\\": "src"
         },
         "classmap" : [
             "tests"

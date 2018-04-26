@@ -1,14 +1,10 @@
-# Simple Bitcoin JSON-RPC client based on GuzzleHttp
-
-[![Join the chat at https://gitter.im/php-bitcoinrpc/Lobby](https://badges.gitter.im/php-bitcoinrpc/Lobby.svg)](https://gitter.im/php-bitcoinrpc/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-[![Latest Stable Version](https://poser.pugx.org/denpa/php-bitcoinrpc/v/stable)](https://packagist.org/packages/denpa/php-bitcoinrpc) [![License](https://poser.pugx.org/denpa/php-bitcoinrpc/license)](https://packagist.org/packages/denpa/php-bitcoinrpc) [![Build Status](https://travis-ci.org/denpamusic/php-bitcoinrpc.svg)](https://travis-ci.org/denpamusic/php-bitcoinrpc) [![Code Climate](https://codeclimate.com/github/denpamusic/php-bitcoinrpc/badges/gpa.svg)](https://codeclimate.com/github/denpamusic/php-bitcoinrpc) <a href="https://codeclimate.com/github/denpamusic/php-bitcoinrpc/coverage"><img src="https://codeclimate.com/github/denpamusic/php-bitcoinrpc/badges/coverage.svg" /></a> [![Dependency Status](https://www.versioneye.com/user/projects/58833bfce25f5900365362cf/badge.svg?style=rounded)](https://www.versioneye.com/user/projects/58833bfce25f5900365362cf)
+# Simple Viacoin JSON-RPC client based on GuzzleHttp
 
 ## Installation
-Run ```php composer.phar require denpa/php-bitcoinrpc``` in your project directory or add following lines to composer.json
+Run ```php composer.phar require onurrr/php-viacoinrpc``` in your project directory or add following lines to composer.json
 ```javascript
 "require": {
-    "denpa/php-bitcoinrpc": "^2.0"
+    "onurrr/php-viacoinrpc": "^2.0"
 }
 ```
 and run ```php composer.phar update```.
@@ -19,15 +15,15 @@ PHP 7.0 or higher (should also work on 5.6, but this is unsupported)
 ## Usage
 Create new object with url as parameter
 ```php
-use Denpa\Bitcoin\Client as BitcoinClient;
+use Onurrr\Viacoin\Client as ViacoinClient;
 
-$bitcoind = new BitcoinClient('http://rpcuser:rpcpassword@localhost:8332/');
+$viacoind = new ViacoinClient('http://rpcuser:rpcpassword@localhost:8332/');
 ```
-or use array to define your bitcoind settings
+or use array to define your viacoind settings
 ```php
-use Denpa\Bitcoin\Client as BitcoinClient;
+use Onurrr\Viacoin\Client as ViacoinClient;
 
-$bitcoind = new BitcoinClient([
+$viacoind = new ViacoinClient([
     'scheme' => 'http',                 // optional, default http
     'host'   => 'localhost',            // optional, default localhost
     'port'   => 8332,                   // optional, default 8332
@@ -36,12 +32,12 @@ $bitcoind = new BitcoinClient([
     'ca'     => '/etc/ssl/ca-cert.pem'  // optional, for use with https scheme
 ]);
 ```
-Then call methods defined in [Bitcoin Core API Documentation](https://bitcoin.org/en/developer-reference#bitcoin-core-apis) with magic:
+Then call methods defined in [Viacoin Core API Documentation](https://viacoin.org/en/developer-reference#viacoin-core-apis) with magic:
 ```php
 /**
  * Get block info.
  */
-$block = $bitcoind->getBlock('000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f');
+$block = $viacoind->getBlock('000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f');
 
 $block('hash')->get();     // 000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f
 $block['height'];          // 0 (array access)
@@ -60,23 +56,23 @@ $block('tx')->last();      // txid of last transaction
 /**
  * Send transaction.
  */
-$result = $bitcoind->sendToAddress('mmXgiR6KAhZCyQ8ndr2BCfEq1wNG2UnyG6', 0.1);
+$result = $viacoind->sendToAddress('mmXgiR6KAhZCyQ8ndr2BCfEq1wNG2UnyG6', 0.1);
 $txid = $result->get();
 
 /**
  * Get transaction amount.
  */
-$result = $bitcoind->listSinceBlock();
+$result = $viacoind->listSinceBlock();
 $totalAmount = $result->sum('transactions.*.amount');
-$totalSatoshi = BitcoinClient::toSatoshi($totalAmount);
+$totalSatoshi = ViacoinClient::toSatoshi($totalAmount);
 ```
 To send asynchronous request, add Async to method name:
 ```php
-use Denpa\Bitcoin\BitcoindResponse;
+use Onurrr\Viacoin\ViacoindResponse;
 
-$promise = $bitcoind->getBlockAsync(
+$promise = $viacoind->getBlockAsync(
     '000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f',
-    function (BitcoindResponse $success) {
+    function (ViacoindResponse $success) {
         //
     },
     function (\Exception $exception) {
@@ -92,7 +88,7 @@ You can also send requests using request method:
 /**
  * Get block info.
  */
-$block = $bitcoind->request('getBlock', '000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f');
+$block = $viacoind->request('getBlock', '000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f');
 
 $block('hash');            // 000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f
 $block['height'];          // 0 (array access)
@@ -110,18 +106,18 @@ $block->random(1, 'tx');   // get random txid
 /**
  * Send transaction.
  */
-$result = $bitcoind->request('sendtoaddress', ['mmXgiR6KAhZCyQ8ndr2BCfEq1wNG2UnyG6', 0.06]);
+$result = $viacoind->request('sendtoaddress', ['mmXgiR6KAhZCyQ8ndr2BCfEq1wNG2UnyG6', 0.06]);
 $txid = $result->get();
 
 ```
 or requestAsync method for asynchronous calls:
 ```php
-use Denpa\Bitcoin\BitcoindResponse;
+use Onurrr\Viacoin\ViacoindResponse;
 
-$promise = $bitcoind->requestAsync(
+$promise = $viacoind->requestAsync(
     'getBlock',
     '000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f',
-    function (BitcoindResponse $success) {
+    function (ViacoindResponse $success) {
         //
     },
     function (\Exception $exception) {

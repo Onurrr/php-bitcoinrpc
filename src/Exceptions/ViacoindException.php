@@ -1,13 +1,13 @@
 <?php
 
-namespace Denpa\Bitcoin\Exceptions;
+namespace Onurrr\Viacoin\Exceptions;
 
 use RuntimeException;
 
-class BitcoindException extends RuntimeException
+class ViacoindException extends RuntimeException
 {
     /**
-     * Construct new bitcoind exception.
+     * Construct new viacoind exception.
      *
      * @param object $error
      *
