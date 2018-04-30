@@ -32,7 +32,7 @@ $viacoind = new ViacoinClient([
     'ca'     => '/etc/ssl/ca-cert.pem'  // optional, for use with https scheme
 ]);
 ```
-Then call methods defined in [Viacoin Core API Documentation](https://viacoin.org/en/developer-reference#viacoin-core-apis) with magic:
+Then call methods defined in [Viacoin Core API Documentation](https://bitcoin.org/en/developer-reference#bitcoin-core-apis) with magic:
 ```php
 /**
  * Get block info.
